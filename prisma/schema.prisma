@@ -9,15 +9,24 @@ datasource db {
 
 model User {
   id                    BigInt    @id @default(autoincrement())
+  employeeId            String    @unique
   firstname             String
   lastname              String
   email                 String    @unique
   role                  Role
   status                Status    @default(PENDING)
-  passwordHash          String
+  passwordHash          String?
   dataPolicyAccepted    Boolean   @default(false)
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
+  provider              Provider  @default(LOCAL)
+  isApproved            Boolean   @default(false)
+  isVerified            Boolean   @default(false)
+  verificationToken     String?
+
+  @@index([role, status])
+  @@index([isApproved, status])
+  @@index([provider, email])
 }
 
 enum Role {
@@ -30,4 +39,9 @@ enum Status {
   PENDING
   ACTIVE
   INACTIVE
+}
+
+enum Provider {
+  LOCAL
+  GOOGLE
 }

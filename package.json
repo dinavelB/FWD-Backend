@@ -6,6 +6,12 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "migrate:dev": "NODE_ENV=development prisma migrate dev",
+    "migrate:staging": "NODE_ENV=staging prisma migrate deploy",
+    "migrate:prod": "NODE_ENV=production prisma migrate deploy",
+    "studio:dev": "NODE_ENV=development prisma studio",
+    "studio:staging": "NODE_ENV=staging prisma studio",
+    
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -24,6 +30,7 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/client": "^7.4.0",
+    "dotenv": "^17.3.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
