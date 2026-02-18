@@ -9,9 +9,13 @@ export class UsersService {
 
   async create(createUser: CreateUserDto) {
     try {
-      await this.prisma.user.create({
+      const user = await this.prisma.user.create({
         data: createUser,
       });
+
+      const { id, ...others } = user;
+
+      return others;
     } catch (e) {
       throw new Error(`error at: ${e.message}`); //passed the error message to controller via e.message
     }
