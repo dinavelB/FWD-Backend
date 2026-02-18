@@ -6,17 +6,38 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersService } from '../service/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { error } from 'console';
 
-@Controller('users')
+@Controller('users') //this is the parent path
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  @HttpCode(201)
+  async create(@Body() createUserDto: CreateUserDto) {
+    try {
+      await this.usersService.create(createUserDto);
+    } catch (e) {
+      console.log('error at:', e.message);
+      throw new HttpException( //a http class for catching bad responses
+        {
+          status: HttpStatus.CONFLICT,
+          error: 'user not successfully created',
+        },
+        HttpStatus.CONFLICT,
+        {
+          cause: e,
+        },
+      );
+    }
+
     return this.usersService.create(createUserDto);
   }
 
